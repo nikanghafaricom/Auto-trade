@@ -218,6 +218,12 @@ class RenderWebhookHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b"Render Signal Generator is alive and running!")
 
+    def do_HEAD(self):
+        # اضافه شده برای جلوگیری از خطای 501 در درخواست‌های مانیتورینگ (مثل UptimeRobot)
+        self.send_response(200)
+        self.send_header("Content-type", "text/html; charset=utf-8")
+        self.end_headers()
+
     def do_POST(self):
         try:
             auth_token = self.headers.get("X-Secret-Token")
