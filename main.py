@@ -219,7 +219,6 @@ class RenderWebhookHandler(BaseHTTPRequestHandler):
         self.wfile.write(b"Render Signal Generator is alive and running!")
 
     def do_HEAD(self):
-        # اضافه شده برای جلوگیری از خطای 501 در درخواست‌های مانیتورینگ (مثل UptimeRobot)
         self.send_response(200)
         self.send_header("Content-type", "text/html; charset=utf-8")
         self.end_headers()
@@ -269,7 +268,7 @@ class RenderWebhookHandler(BaseHTTPRequestHandler):
                     f"💎 نماد: `{symbol}`\n"
                     f"💵 قیمت خروج: `{exit_price}`\n"
                     f"📊 نتیجه: **{status_text} با {pnl:+.2f}%**\n"
-                    f"🏷 صرافی: `تبدیل (Tabdeal)`"
+                    f"🏷 صرافی: `آبان‌تتر (AbanTether)`"
                 )
                 TelegramNotifier.send_to_personal(close_msg)
 
