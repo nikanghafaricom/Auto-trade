@@ -62,7 +62,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# ==================== لایه تحلیل تکنیکال ====================
+# ==================== لایه تحلیل تکنیکال (برگرفته از کد دوم) ====================
 class AnalysisLayer:
     def __init__(self, config: Config):
         self.config = config
@@ -92,15 +92,15 @@ class AnalysisLayer:
 
         return df
 
-    def get_major_trend(self, df_trend: pd.DataFrame) -> str:
-        latest = df_trend.iloc[-1]
+    def get_major_trend(self, df_4h: pd.DataFrame) -> str:
+        latest = df_4h.iloc[-1]
         if latest['close'] > latest['ema_trend'] and latest['ema_fast'] > latest['ema_slow']:
             return "BULLISH"
         elif latest['close'] < latest['ema_trend'] and latest['ema_fast'] < latest['ema_slow']:
             return "BEARISH"
         return "NEUTRAL"
 
-# ==================== موتور سیگنال (بهینه‌شده V5) ====================
+# ==================== موتور سیگنال (برگرفته از کد دوم) ====================
 class SignalEngine:
     def __init__(self, config: Config):
         self.config = config
@@ -121,14 +121,12 @@ class SignalEngine:
             ema_bull = latest['ema_fast'] > latest['ema_slow']
             rsi_buy = (latest['rsi'] > 42 and prev['rsi'] <= 42) or (48 <= latest['rsi'] <= 65 and latest['rsi'] > prev['rsi'])
             if ema_bull and rsi_buy and volume_confirmed:
-                logger.info(f"سیگنال خرید (BUY) با منطق بهینه‌شده شناسایی شد.")
                 return "BUY"
 
         if trend_4h in ["BEARISH", "NEUTRAL"]:
             ema_bear = latest['ema_fast'] < latest['ema_slow']
             rsi_sell = (latest['rsi'] < 58 and prev['rsi'] >= 58) or (35 <= latest['rsi'] <= 52 and latest['rsi'] < prev['rsi'])
             if ema_bear and rsi_sell and volume_confirmed:
-                logger.info(f"سیگنال فروش (SELL) با منطق بهینه‌شده شناسایی شد.")
                 return "SELL"
 
         return None
